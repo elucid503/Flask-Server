@@ -41,16 +41,19 @@ class LoginElement:
         self.Success = Success
 
     def ToHTML(self):
-        return f"""
+    return f"""
+    <div class='form-group'>
         <label for='username'>Username</label>
-        <input type='text' name='username' id='username'/>
-        <br/>
+        <input type='text' name='username' id='username' class='form-control'/>
+    </div>
+    <div class='form-group'>
         <label for='password'>Password</label>
-        <input type='password' name='password' id='password'/>
-        <br/>
+        <input type='password' name='password' id='password' class='form-control'/>
+    </div>
+    <div class='form-group'>
         {self.Success and f'<p>{self.Message}</p>' or f"<p style='color: red;'>{self.Message}</p>"}
-        <input type='submit' name='submit' id='submit' value='Login'/>
-        """
+        <input type='submit' name='submit' id='submit' value='Login' class='btn btn-primary'/>
+    </div>"""
 
 class LoggedInElement:
     def __init__(self, Message, Success, User):
@@ -59,13 +62,11 @@ class LoggedInElement:
         self.User = User
 
     def ToHTML(self):
-        return f"""
-        <div class='LoggedInElement'>
-            <p>Logged in successfully</p>
-            <p>Username: {self.User.UserName}</p>
-            <p>Password: {self.User.Password}</p>
-        </div>
-        """
+    return f"""<div class='LoggedInElement'>
+        <p>Logged in successfully</p>
+        <p>Username: {self.User.UserName}</p>
+        <p>Password: {self.User.Password}</p>
+    </div>"""
 
 if __name__ == '__main__':
     app.run(debug=True)
