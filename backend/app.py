@@ -4,10 +4,12 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# In-memory storage for users
-Users = {}
+# Check if DB directory exists 
 
-@app.route('/login', methods=['POST'])
+
+
+
+@app.route('/CreateAccount', methods=['POST'])
 def Login():
     # Get the username and password from the request body
     UserName = request.form.get('username')
@@ -16,9 +18,11 @@ def Login():
     if not UserName or not Password:
         return make_response(LoginElement("Missing username or password", False).ToHTML())
 
+    # Check if the db directory 
+
     # Create a new user from the username and password
     CreatedUser = User(UserName, Password)
-    Users[UserName] = CreatedUser
+    User.Save()
 
     # Set cookie to the username
     Response = make_response(LoggedInElement("Logged in successfully", True, CreatedUser).ToHTML())
@@ -34,6 +38,14 @@ class User:
 
     def AddData(self, Key, Value):
         self.Data[Key] = Value
+    
+    def Save(self):
+        # Save the user to the database
+        path = f"./store/users/{self.UserName}.json"
+        with open(path, 'w') as f:
+            f.write(json.dumps(self.Data))
+            f.close()
+        return True
 
 class LoginElement:
     def __init__(self, Message, Success):
@@ -69,4 +81,4 @@ class LoggedInElement:
         </div>"""
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
